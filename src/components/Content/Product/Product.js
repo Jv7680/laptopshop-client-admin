@@ -32,7 +32,7 @@ class Product extends Component {
   }
   async componentDidMount() {
     const { currentPage } = this.state
-    const res = await this.props.fetch_products(currentPage);
+    const res = await callApi(`admin/product/all?page=${currentPage}&size=10`, 'GET', null, token);
     //const resCatagory = await this.props.fetch_catagory();
     if (res && res.status === 200) {
       this.setState({
