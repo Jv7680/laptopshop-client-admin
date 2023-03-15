@@ -1,0 +1,207 @@
+:root {
+  --slick-list-height: 240px;
+  --slick-list-img-height: 232px;
+}
+
+.fix-create-action {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+}
+
+.fix-cart-product {
+  height: 200px !important;
+  width: 300px !important;
+  margin: auto;
+  overflow: hidden;
+}
+
+.fix-img-product {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.fix-margin {
+  margin: auto;
+  padding-top: 1%;
+}
+
+.fix-create {
+  margin-left: 77%;
+}
+
+.fix-action {
+  font-size: 20px;
+  margin: 5px;
+}
+
+.model {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+.modal-content {
+  position: relative;
+  background-color: white;
+  /* Max width where it stops expanding */
+  /* Height in proportion to its parent container */
+  margin: auto;
+  /* Auto margin according to the element width */
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  /* Optional. Rounds container corners */
+}
+
+/* Close button */
+.close_button {
+  color: #fff;
+  background-color: #999;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 15px;
+  border-radius: 50%;
+  border: 2px solid #333;
+}
+
+.close_button:hover,
+.close_button:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.drop-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d9d9d9;
+  margin: 0px 2%;
+  border-radius: 4px;
+  height: 70px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.btn-delete-all-image {
+  margin-top: 10px;
+}
+
+.btn-delete-all-image button {
+  margin-left: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  float: right;
+  background-color: #ff3b3b;
+  color: white;
+  font-size: 16px;
+}
+
+.btn-delete-all-image button:hover {
+  background-color: #ff0e0e;
+}
+
+.silder-image-product {
+  width: 100%;
+  height: var(--slick-list-height) !important;
+}
+
+.image-in-slider {
+  height: var(--slick-list-height);
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-in-slider img {
+  /* bằng height của .silder-image-product */
+  height: var(--slick-list-img-height);
+  width: auto;
+}
+
+/* overide css Slider React Slick */
+.slick-list {
+  height: var(--slick-list-height) !important;
+  margin-top: 0px !important;
+  background-color: white;
+}
+
+/* .slick-dots li {
+  width: auto !important;
+  padding: 0 !important;
+
+} */
+
+.slick-dots li button:before {
+  color: #474af0 !important;
+}
+
+.slick-dots {
+  /* bottom: 30px !important; */
+  top: 98%;
+}
+
+.ReactModal__Overlay--after-open {
+  z-index: 9999;
+}
+
+/* .slick-list {
+  height: 430px !important;
+  margin-top: 35px !important;
+} */
+
+.slick-prev,
+.slick-next {
+  top: 50% !important;
+  z-index: 1;
+  background: transparent !important;
+  font-size: 20px !important;
+  font-family: initial;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 15px !important;
+  /* border: 1px solid #a6aaad !important; */
+}
+
+.slick-prev {
+  left: 0 !important;
+}
+
+.slick-next {
+  right: 0 !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  content: "" !important;
+  width: 15px;
+  height: 15px;
+  border-radius: 0px;
+  display: block;
+  border-top: 3px solid #a6aaad;
+  border-left: 3px solid #a6aaad;
+  margin: auto !important;
+}
+
+.slick-prev::before {
+  transform: rotateZ(315deg);
+}
+
+.slick-next::before {
+  transform: rotateZ(135deg);
+}
+
+.slick-prev:hover:before,
+.slick-prev:focus:before,
+.slick-next:hover:before,
+.slick-next:focus:before {
+  opacity: 1 !important;
+}
