@@ -106,7 +106,7 @@ class NavBar extends Component {
           <li><Link to="/producers"> <i className="icon icon-list-1" />Nhà cung cấp</Link></li>
           <li><Link to="/news"> <i className="icon icon-page" />Tin tức</Link></li>
           {/* <li><Link to="/customers"> <i className="icon icon-user" />QL người dùng</Link></li> */}
-          <li><Link onClick={() => { this.HandleLogout() }}> <i className="icon icon-close" />Đăng xuất</Link></li>
+          <li><Link to="#" onClick={() => { this.HandleLogout() }}> <i className="icon icon-close" />Đăng xuất</Link></li>
 
         </ul>
 

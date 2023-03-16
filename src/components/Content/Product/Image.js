@@ -88,7 +88,7 @@ class Image extends React.Component {
         // Up xong thì get lại data
         await this.getDataImage();
 
-        // Thông báo thêm ảnh thành công
+        // Thông báo chọn ảnh thành công
         Swal.fire({
             title: 'Thêm thành công',
             text: `Ảnh: ${imageName}`,
