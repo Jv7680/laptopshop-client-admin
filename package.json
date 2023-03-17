@@ -2,10 +2,6 @@
   "name": "react-admin",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "16.18.0",
-    "npm": "8.19.2"
-  },
   "dependencies": {
     "@emotion/core": "^10.1.0",
     "@testing-library/jest-dom": "^5.16.1",

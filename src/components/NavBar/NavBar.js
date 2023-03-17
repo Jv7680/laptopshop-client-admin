@@ -45,7 +45,7 @@ class NavBar extends Component {
     console.log('dashboard: ', dashboard)
 
     return (
-      <nav className="side-navbar" style={{ minWidth: "190px" }}>
+      <nav className="side-navbar" style={{ minWidth: "190px", maxHeight: '100vh', overflow: 'auto' }}>
         {/* Sidebar Header*/}
         <div className="sidebar-header d-flex align-items-center">
           <div className="avatar">
@@ -105,8 +105,9 @@ class NavBar extends Component {
           <li><Link to="/products"> <i className="icon icon-website" />Sản phẩm</Link></li>
           <li><Link to="/producers"> <i className="icon icon-list-1" />Nhà cung cấp</Link></li>
           <li><Link to="/news"> <i className="icon icon-page" />Tin tức</Link></li>
+          <li><Link to="/chat"> <i className="icon icon-page" />Chat</Link></li>
           {/* <li><Link to="/customers"> <i className="icon icon-user" />QL người dùng</Link></li> */}
-          <li><Link onClick={() => { this.HandleLogout() }}> <i className="icon icon-close" />Đăng xuất</Link></li>
+          <li><Link to="#" onClick={() => { this.HandleLogout() }}> <i className="icon icon-close" />Đăng xuất</Link></li>
 
         </ul>
 

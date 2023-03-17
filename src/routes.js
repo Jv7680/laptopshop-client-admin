@@ -15,6 +15,7 @@ import OrderStatus4Page from './pages/OrderStatus4Page';
 import OrderStatus5Page from './pages/OrderStatus5Page';
 import NewPage from './pages/NewPage';
 import ActionNew from './components/Content/New/ActionNew';
+import ChatPage from './pages/ChatPage';
 
 const routes = [
     {
@@ -26,6 +27,11 @@ const routes = [
         path: '/login',
         exact: false,
         main: () => <Login />
+    },
+    {
+        path: '/chat',
+        exact: false,
+        main: () => <ChatPage />
     },
     {
         path: '/customers',

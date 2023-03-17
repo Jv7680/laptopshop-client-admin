@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { actShowLoading, actHiddenLoading } from './loading'
 import 'react-toastify/dist/ReactToastify.css';
 import { is_empty } from '../../utils/validations';
+import store from '../..';
 
 export const actFetchProductsRequest = (page) => {
   const newPage = page === null || page === undefined ? 1 : page;
@@ -13,7 +14,7 @@ export const actFetchProductsRequest = (page) => {
     const res = await callApi(`admin/product/all?page=${page}&size=10`, 'GET', null, token)
     console.log('actFetchProductsRequest res: ', res);
     if (res && res.status === 200) {
-      dispatch(actFetchProducts(res.data.listProducts));
+      store.dispatch(actFetchProducts(res.data.listProducts));
     };
     return res;
   };

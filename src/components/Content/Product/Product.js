@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './style.css'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { actFetchProductsRequest, actDeleteProductRequest, actGetProductOfKeyRequest, actGetProductOfCatagoryRequest, actActiveProductRequest } from '../../../redux/actions/product';
+import { actFetchProductsRequest, actFetchProductsRequest1, actDeleteProductRequest, actGetProductOfKeyRequest, actGetProductOfCatagoryRequest, actActiveProductRequest } from '../../../redux/actions/product';
 import { actFetchCategoriesRequest } from '../../../redux/actions/category';
 import Switch from "react-switch";
 import Swal from 'sweetalert2'
@@ -13,10 +13,8 @@ import { is_empty } from '../../../utils/validations';
 import callApi from '../../../utils/apiCaller';
 import { getProductFirstImageURL } from '../../../firebase/CRUDImage';
 import ProductItem from './ProductItem';
+import { async } from '@firebase/util';
 const MySwal = withReactContent(Swal)
-
-let token = localStorage.getItem('_auth');
-
 
 class Product extends Component {
 
@@ -31,9 +29,10 @@ class Product extends Component {
     }
   }
   async componentDidMount() {
-    const { currentPage } = this.state
-    const res = await callApi(`admin/product/all?page=${currentPage}&size=10`, 'GET', null, token);
-    //const resCatagory = await this.props.fetch_catagory();
+    let token = localStorage.getItem('_auth');
+    const { currentPage } = this.state;
+
+    const res = await actFetchProductsRequest(currentPage)();
     if (res && res.status === 200) {
       this.setState({
         total: res.data.totalPage,
@@ -50,7 +49,6 @@ class Product extends Component {
         localStorage.setItem('_newProductID', newProductID);
       }
     }
-
 
 
   }
@@ -307,8 +305,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetch_products: (page) => {
-      return dispatch(actFetchProductsRequest(page))
+    fetch_products: async (page) => {
+      return await dispatch(await actFetchProductsRequest(page))
     },
     fetch_catagory: () => {
       return dispatch(actFetchCategoriesRequest())
