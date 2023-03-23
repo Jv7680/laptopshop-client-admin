@@ -10,14 +10,21 @@ class ChatAdmin extends React.Component {
         return (
             <>
                 {
-                    messageListAdmin.map((item, index) => {
-                        return (
-                            <div className="chat-row" key={index}>
-                                <MessageItem messageItem={item}></MessageItem>
-                            </div>
+                    messageListAdmin && messageListAdmin.length ?
+                        (
+                            messageListAdmin.map((item, index) => {
+                                return (
+                                    <div className="chat-row" key={index}>
+                                        <MessageItem messageItem={item}></MessageItem>
+                                    </div>
 
-                        );
-                    })
+                                );
+                            })
+                        )
+                        :
+                        (
+                            null
+                        )
                 }
             </>
         );

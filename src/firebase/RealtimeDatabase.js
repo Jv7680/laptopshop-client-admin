@@ -18,24 +18,24 @@ export async function writeUserChatData(userId, messageItem, newChatIndex) {
 
 // read user chat from database
 // return chat array
-export async function readUserChatData(userId) {
-    let messageList = [];
-    await onValue(ref(realtimeDB, 'userChat/' + `${userId}`), (snapshot) => {
-        // If exist data
-        if (snapshot.size != 0) {
-            newChatIndex = snapshot.val().length;
-            console.log('newChatIndex', newChatIndex);
-            console.log('snap', snapshot);
-            console.log('snapshot.val()', snapshot.val());
-            messageList = snapshot.val();
-        }
-        else {
-            console.log('userId không tồn tại!');
-        }
-    });
+// export async function readUserChatData(userId) {
+//     let messageList = [];
+//     await onValue(ref(realtimeDB, 'userChat/' + `${userId}`), (snapshot) => {
+//         // If exist data
+//         if (snapshot.size != 0) {
+//             newChatIndex = snapshot.val().length;
+//             console.log('newChatIndex', newChatIndex);
+//             console.log('snap', snapshot);
+//             console.log('snapshot.val()', snapshot.val());
+//             messageList = snapshot.val();
+//         }
+//         else {
+//             console.log('userId không tồn tại!');
+//         }
+//     });
 
-    return messageList;
-}
+//     return messageList;
+// }
 
 // read user chat from database
 // return chat array

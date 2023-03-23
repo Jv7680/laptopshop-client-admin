@@ -4,14 +4,14 @@ import axios from "axios";
 import PulseLoader from 'react-spinners/PulseLoader';
 import { connect } from 'react-redux';
 import { css } from '@emotion/core';
-import { readUserChatData, writeUserChatData } from "../../../firebase/RealtimeDatabase";
+import { readListUserChat, writeUserChatData } from "../../../firebase/RealtimeDatabase";
 import ChatAdmin from "./ChatAdmin";
 import { Link } from 'react-router-dom'
-import { readListUserChat } from "../../../firebase/RealtimeDatabase";
 import { NavLink } from "react-router-dom";
 import './chat.css';
 import { toast } from "react-toastify";
-import { async } from "@firebase/util";
+import { realtimeDB } from "../../../firebase/firebaseConfig";
+import { ref, onValue, off } from "firebase/database";
 
 const cssPulseLoader = css`
     margin: auto;
@@ -50,6 +50,26 @@ class Chat extends React.Component {
 
     componentDidMount = async () => {
         await this.getListUserChat();
+
+        // trigger onValue here to listening value change
+        onValue(ref(realtimeDB, 'userChat'), (snapshot) => {
+            console.log('trigged onValue(), listening');
+            console.log('snap', snapshot);
+            console.log('snapshot.val()', snapshot.val());
+
+            this.setState({ listUserChat: snapshot.val() }, () => {
+                if (this.currentUserId != 0 && this.currentUserId) {
+                    this.setState({
+                        messageListAdmin: this.state.listUserChat[this.currentUserId]
+                    });
+                }
+            });
+        });
+    }
+
+    componentWillUnmount = () => {
+        // unsubcribe listener onValue
+        off(ref(realtimeDB, 'userChat'));
     }
 
     componentDidUpdate = () => {
@@ -205,7 +225,7 @@ class Chat extends React.Component {
                         <div className="row" style={{ height: '70vh' }}>
                             <div className="col-3 left-col">
                                 {
-                                    Object.keys(listUserChat).length != 0 ?
+                                    listUserChat && Object.keys(listUserChat).length != 0 ?
                                         (
                                             Object.keys(listUserChat).map(
                                                 (item, index) => {
