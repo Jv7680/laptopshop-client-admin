@@ -12,6 +12,8 @@ import './chat.css';
 import { toast } from "react-toastify";
 import { realtimeDB } from "../../../firebase/firebaseConfig";
 import { ref, onValue, off } from "firebase/database";
+import { updateSeenStatus } from "../../../firebase/RealtimeDatabase";
+import ChatNotice from "./ChatNotice";
 
 const cssPulseLoader = css`
     margin: auto;
@@ -38,6 +40,7 @@ class Chat extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showChatNotice: false,
             chatContent: '',
             messageListAdmin: [],
             listUserChat: {},
@@ -53,7 +56,7 @@ class Chat extends React.Component {
 
         // trigger onValue here to listening value change
         onValue(ref(realtimeDB, 'userChat'), (snapshot) => {
-            console.log('trigged onValue(), listening');
+            console.log('trigger onValue(), listening');
             console.log('snap', snapshot);
             console.log('snapshot.val()', snapshot.val());
 
@@ -61,7 +64,14 @@ class Chat extends React.Component {
                 if (this.currentUserId != 0 && this.currentUserId) {
                     this.setState({
                         messageListAdmin: this.state.listUserChat[this.currentUserId]
-                    });
+                    },
+                        () => {
+                            let { listUserChat } = this.state;
+                            let userId = this.currentUserId;
+                            if (listUserChat[userId][listUserChat[userId].length - 1].user === 'user' && !listUserChat[userId][listUserChat[userId].length - 1].adminHasSeen) {
+                                updateSeenStatus(parseInt(userId), (listUserChat[userId].length - 1), true);
+                            }
+                        });
                 }
             });
         });
@@ -145,14 +155,19 @@ class Chat extends React.Component {
         }
         // event.target.classList.add('left-col-chat-name--active');
 
-        this.currentUserId = userId;
+        this.currentUserId = parseInt(userId);
         await this.getListUserChat();
         let { listUserChat } = this.state;
         this.setState({
             showRightCol: true,
             chatContent: '',
             messageListAdmin: listUserChat[userId]
-        });
+        },
+            () => {
+                if (listUserChat[userId][listUserChat[userId].length - 1].user === 'user' && !listUserChat[userId][listUserChat[userId].length - 1].adminHasSeen) {
+                    updateSeenStatus(parseInt(userId), (listUserChat[userId].length - 1), true);
+                }
+            });
     }
 
     handleSubmit = async () => {
@@ -177,6 +192,7 @@ class Chat extends React.Component {
         let messageItem = {
             user: 'admin',
             content: this.formatChatContent(chatContent),
+            userHasSeen: false,
         };
 
         let handleChange = this.handleChange;
@@ -204,7 +220,7 @@ class Chat extends React.Component {
     }
 
     render() {
-        const { listUserChat, chatContent, messageListAdmin } = this.state;
+        const { showChatNotice, listUserChat, chatContent, messageListAdmin } = this.state;
         return (
             <div className="content-inner" style={{ maxHeight: '100vh' }}>
                 {/* Page Header*/}
@@ -231,6 +247,16 @@ class Chat extends React.Component {
                                                 (item, index) => {
                                                     return (
                                                         <div key={item} className="left-col-chat-name" onClick={(event) => { this.onClickName(item, event) }}>
+                                                            {
+                                                                listUserChat[item][listUserChat[item].length - 1].user === 'user' && !listUserChat[item][listUserChat[item].length - 1].adminHasSeen ?
+                                                                    (
+                                                                        <ChatNotice isShow={true}></ChatNotice>
+                                                                    )
+                                                                    :
+                                                                    (
+                                                                        null
+                                                                    )
+                                                            }
                                                             <span >
                                                                 {listUserChat[item][0].userName}
                                                             </span>
