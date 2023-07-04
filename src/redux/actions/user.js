@@ -9,18 +9,18 @@ export const actFetchUsersRequest = (page) => {
   return dispatch => {
     dispatch(actShowLoading());
     return new Promise((resolve, reject) => {
-      callApi(`customer/all?page=${newPage}`, 'GET')
+      let token = localStorage.getItem('_auth');
+      // callApi(`customer/all?page=${newPage}`, 'GET')
+      callApi(`admin/account/users`, 'GET', undefined, token)
         .then(res => {
           if (res && res.status === 200) {
-            dispatch(actFetchUsers(res.data.listCustomer));
+            dispatch(actFetchUsers(res.data));
             resolve(res.data);
-            setTimeout(function(){ dispatch(actHiddenLoading()) }, 200);
           }
         })
         .catch(err => {
           console.log(err);
           reject(err);
-          setTimeout(function(){ dispatch(actHiddenLoading()) }, 200);
         });
     });
   };

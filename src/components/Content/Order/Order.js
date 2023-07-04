@@ -31,7 +31,8 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    width: "1000px"
+    width: "1000px",
+    height: "90vh",
   }
 };
 class Order extends Component {
@@ -281,6 +282,7 @@ class Order extends Component {
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
                             <th>Ghi chú</th>
+                            <th>Thanh toán</th>
                             <th>Ngày tạo HĐ</th>
                             <th>Xóa</th>
                             <th>Duyệt
@@ -294,38 +296,6 @@ class Order extends Component {
                               <tr key={index} onDoubleClick={(e) => { this.openModalOrderDetail(e, item) }}>
                                 <th scope="row">{item.orderId}</th>
                                 <td>
-                                  {/* {
-                                    item.lstOrdersDetail && item.lstOrdersDetail.length ?
-                                      item.lstOrdersDetail.map((product, index) => {
-                                        return (
-                                          <>
-                                            <li className='d-flex' key={index}>
-                                              <div className="fix-order">
-                                                <img src={product.imgLink} className="fix-img-order" alt="not found" />
-                                              </div>
-                                              <div>
-                                                <h6 className='pl-3 pt-10'>{product.productName}</h6>
-
-
-                                                <strong
-                                                  className="pl-3 product-quantity"
-                                                  style={{
-                                                    paddingLeft: 10,
-                                                    color: "coral",
-                                                    fontStyle: "italic",
-                                                  }}
-                                                >
-                                                  SL: {product.quantity}
-                                                </strong>
-                                              </div>
-
-
-                                            </li>
-                                          </>
-
-                                        )
-                                      }) : null
-                                  } */}
                                   {
                                     item.totalQuantity
                                   }
@@ -335,12 +305,7 @@ class Order extends Component {
                                 <td>{item.phoneNumber}</td>
                                 <td>{item.address}</td>
                                 <td>{item.customerNote}</td>
-                                {/* <td>
-                                  <div className="col">
-                                    <label className="fix-status px-2 bg-danger" >1
-                                    </label>
-                                  </div>
-                                </td> */}
+                                <td>{item.paymentmethod}</td>
                                 <td>
                                   <Moment format="YYYY/MM/DD">
                                     {item.createDate}

@@ -102,6 +102,7 @@ class NavBar extends Component {
             </ul>
           </li>
 
+          <li><Link to="/customers"> <i class="fa-solid fa-users"></i>Người dùng</Link></li>
           <li><Link to="/products"> <i className="icon icon-website" />Sản phẩm</Link></li>
           <li><Link to="/producers"> <i className="icon icon-list-1" />Nhà cung cấp</Link></li>
           <li><Link to="/news"> <i className="icon icon-page" />Tin tức</Link></li>

@@ -60,9 +60,9 @@ class ProductItem extends Component {
                 <td>
                     {
                         product.isdeleted == 1 ?
-                            <Switch onChange={() => this.handleActive(product.productId)} checked={true} />
+                            <Switch onChange={() => this.props.handleActive(product.productId)} checked={true} />
                             :
-                            <Switch onChange={() => this.handleRemove(product.productId)} checked={false} />
+                            <Switch onChange={() => this.props.handleRemove(product.productId)} checked={false} />
 
                     }
 

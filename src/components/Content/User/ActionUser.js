@@ -36,19 +36,21 @@ class ActionUser extends Component {
         id = this.props.id
     }
     async componentDidMount() {
-        if (id) {
-            const res = await callApi(`customer/${id}`, 'GET');
-            console.log("user", res.data)
-            this.setState({
-                lastName: res.data.lastName,
-                firstName: res.data.firstName,
-                userCustomer: res.data.userCustomer,
-                gmailCustomer: res.data.gmailCustomer,
-                phoneNumber: res.data.phoneNumberCustomer,
-                address: res.data.address
+        // if (id) {
+        //     const res = await callApi(`customer/${id}`, 'GET');
+        //     console.log("user", res.data)
+        //     this.setState({
+        //         lastName: res.data.lastName,
+        //         firstName: res.data.firstName,
+        //         userCustomer: res.data.userCustomer,
+        //         gmailCustomer: res.data.gmailCustomer,
+        //         phoneNumber: res.data.phoneNumberCustomer,
+        //         address: res.data.address
 
-            })
-        }
+        //     })
+        // }
+
+        console.log("match user ", this.props.id);
     }
 
 

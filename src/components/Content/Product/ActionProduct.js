@@ -51,32 +51,32 @@ class ActionProduct extends Component {
       supplierId: 1,
       image: '',
 
-      cpu_name: '',
+      cpu_name: 'Celeron',
       cpu_core: '',
-      cpu_cache: '',
+      cpu_cache: '2 MB',
       cpu_thread: '',
       cpu_speed: '',
 
-      harddrive_capacity: null,
-      harddrive_type: null,
+      harddrive_capacity: "128 GB",
+      harddrive_type: "SSD",
 
-      ram_capacity: null,
-      ram_type: null,
-      ram_bus: null,
+      ram_capacity: "4 GB",
+      ram_type: "DDR3",
+      ram_bus: "1600",
 
-      screen_size: null,
-      screen_resolution: null,
-      screen_frequency: null,
+      screen_size: "11.6 inch",
+      screen_resolution: "1280 x 720",
+      screen_frequency: "60 HZ",
 
-      graphic_card: null,
-      sound_technology: null,
+      graphic_card: "AMD Radeon R5 520",
+      sound_technology: "",
 
-      weight: null,
-      shell_material: null,
+      weight: "",
+      shell_material: "",
 
-      battery: null,
-      operating_system: null,
-      release_year: null,
+      battery: "",
+      operating_system: "",
+      release_year: "",
 
       redirectToProduct: false,
     };
@@ -88,7 +88,7 @@ class ActionProduct extends Component {
   async componentDidMount() {
     let token = localStorage.getItem('_auth');
     if (id) {
-      const res = await callApi(`product/${id}`, 'GET', null, token);
+      const res = await callApi(`admin/product/${id}`, 'GET', null, token);
       if (res && res.status === 200) {
         console.log("dữ liệu trả về", res.data)
         this.setState({
@@ -102,6 +102,32 @@ class ActionProduct extends Component {
           //categoryId: res.data.categoryFKDto.categoryId,
           //supplierId: res.data.supplierFKDto.supplierId,
 
+          cpu_name: res.data.cpu || "Celeron",
+          cpu_core: res.data.cores,
+          cpu_cache: res.data.cache || "2 MB",
+          cpu_thread: res.data.threads,
+          cpu_speed: res.data.cpuspeed,
+
+          harddrive_capacity: res.data.storagecapacity || "128 GB",
+          harddrive_type: res.data.storagetype || "SSD",
+
+          ram_capacity: res.data.ram || "4 GB",
+          ram_type: res.data.ramtype || "DDR3",
+          ram_bus: res.data.rambusspeed || "1600",
+
+          screen_size: res.data.screensize || "11.6 inch",
+          screen_resolution: res.data.screenresolution || "1280 x 720",
+          screen_frequency: res.data.screenrefreshrate || "60 HZ",
+
+          graphic_card: res.data.graphicscard || "AMD Radeon R5 520",
+          sound_technology: res.data.audiotechnology,
+
+          weight: res.data.weight,
+          shell_material: res.data.casingmaterial,
+
+          battery: res.data.battery,
+          operating_system: res.data.operatingsystem,
+          release_year: res.data.releasedate,
         })
       }
     }
@@ -122,6 +148,8 @@ class ActionProduct extends Component {
     this.setState({
       [name]: value
     });
+
+    console.log("event select", event, event.target.name, event.target.value)
   }
 
   handleChangeSelecProducer = (event) => {
@@ -129,6 +157,8 @@ class ActionProduct extends Component {
     this.setState({
       supplierId: value
     })
+
+    // console.log("e sup", event, event.target.name, event.target.value)
   }
 
   handleChangeEditor = (value) => {
@@ -146,9 +176,30 @@ class ActionProduct extends Component {
       categoryId,
       supplierId,
       filesImage,
-      productImageSet
-    } = this.state;
+      productImageSet,
 
+      cpu_name,
+      cpu_core,
+      cpu_cache,
+      cpu_thread,
+      cpu_speed,
+      harddrive_capacity,
+      harddrive_type,
+      ram_capacity,
+      ram_type,
+      ram_bus,
+      screen_size,
+      screen_resolution,
+      screen_frequency,
+      graphic_card,
+      sound_technology,
+      weight,
+      shell_material,
+      battery,
+      operating_system,
+      release_year,
+    } = this.state;
+    console.log("cpu_name", cpu_name);
     const newProductName = productName === '' ? '' : productName;
     const newQuantity = parseInt(quantity);
     const newDiscount = parseInt(discount);
@@ -159,7 +210,27 @@ class ActionProduct extends Component {
     const { image } = this.state;
 
     //check lỗi
-    if (!validateProduct.name(newProductName) || !validateProduct.unitprice(newUnitPrice) || !validateProduct.discount(newDiscount) || !validateProduct.quantity(newQuantity) || !validateProduct.description(newDescriptionProduct) || !validateProduct.image(image)) {
+    if (!validateProduct.name(newProductName) || !validateProduct.unitprice(newUnitPrice) || !validateProduct.discount(newDiscount) || !validateProduct.quantity(newQuantity)) {
+      return;
+    }
+    //check lỗi cpu
+    if (!validateProduct.cpu(cpu_name) || !validateProduct.cpuCore(cpu_core) || !validateProduct.cpuThread(cpu_thread) || !validateProduct.cpuSpeed(cpu_speed) || !validateProduct.cache(cpu_cache)) {
+      return;
+    }
+    //check lỗi ổ cứng
+    if (!validateProduct.harddriveCapacity(harddrive_capacity) || !validateProduct.harddriveType(harddrive_type)) {
+      return;
+    }
+    //check lỗi ram
+    if (!validateProduct.ram(ram_capacity) || !validateProduct.ramType(ram_type) || !validateProduct.ramBus(ram_bus)) {
+      return;
+    }
+    //check lỗi kích thước màn
+    if (!validateProduct.screenSize(screen_size) || !validateProduct.screenResolution(screen_resolution) || !validateProduct.screenFrequency(screen_frequency)) {
+      return;
+    }
+    //check lỗi khác
+    if (!validateProduct.graphicCard(graphic_card) || !validateProduct.audioTechnology(sound_technology) || !validateProduct.weight(weight) || !validateProduct.shellMaterial(shell_material) || !validateProduct.battery(battery) || !validateProduct.operatingSystem(operating_system) || !validateProduct.releaseYear(release_year) || !validateProduct.description(newDescriptionProduct)) {
       return;
     }
 
@@ -170,7 +241,28 @@ class ActionProduct extends Component {
       "unitprice": newUnitPrice,
       "discount": newDiscount,
       "description": newDescriptionProduct,
-      "supplierId": newSupplierId
+      "supplierId": newSupplierId,
+
+      "cpu": cpu_name,
+      "cores": cpu_core,
+      "threads": cpu_thread,
+      "cpuspeed": cpu_speed,
+      "cache": cpu_cache,
+      "storagecapacity": harddrive_capacity,
+      "storagetype": harddrive_type,
+      "ram": ram_capacity,
+      "ramtype": ram_type,
+      "rambusspeed": ram_bus,
+      "screensize": screen_size,
+      "screenresolution": screen_resolution,
+      "screenrefreshrate": screen_frequency,
+      "graphicscard": graphic_card,
+      "audiotechnology": sound_technology,
+      "weight": weight,
+      "casingmaterial": shell_material,
+      "battery": battery,
+      "operatingsystem": operating_system,
+      "releasedate": release_year,
     }
 
     const newProduct = {
@@ -181,7 +273,28 @@ class ActionProduct extends Component {
       "unitprice": newUnitPrice,
       "discount": newDiscount,
       "description": newDescriptionProduct,
-      "supplierId": newSupplierId
+      "supplierId": newSupplierId,
+
+      "cpu": cpu_name,
+      "cores": cpu_core,
+      "threads": cpu_thread,
+      "cpuspeed": cpu_speed,
+      "cache": cpu_cache,
+      "storagecapacity": harddrive_capacity,
+      "storagetype": harddrive_type,
+      "ram": ram_capacity,
+      "ramtype": ram_type,
+      "rambusspeed": ram_bus,
+      "screensize": screen_size,
+      "screenresolution": screen_resolution,
+      "screenrefreshrate": screen_frequency,
+      "graphicscard": graphic_card,
+      "audiotechnology": sound_technology,
+      "weight": weight,
+      "casingmaterial": shell_material,
+      "battery": battery,
+      "operatingsystem": operating_system,
+      "releasedate": release_year,
     }
 
     if (!id) {
@@ -343,12 +456,25 @@ class ActionProduct extends Component {
                       <div className="form-group row">
                         <label className="col-sm-3 form-control-label">Tên CPU*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="cpu_name" value={cpu_name} onChange={this.handleChange}>
+                            <option selected value="Celeron" >Celeron</option>
+                            <option value="Pentium" >Pentium</option>
+                            <option value="Snapdragon" >Snapdragon</option>
+                            <option value="Intel Core I3" >Intel Core I3</option>
+                            <option value="Intel Core I5" >Intel Core I5</option>
+                            <option value="Intel Core I7" >Intel Core I7</option>
+                            <option value="Intel Core I9" >Intel Core I9</option>
+                            <option value="AMD Ryzen 3" >AMD Ryzen 3</option>
+                            <option value="AMD Ryzen 5" >AMD Ryzen 5</option>
+                            <option value="AMD Ryzen 7" >AMD Ryzen 7</option>
+                            <option value="AMD Ryzen 9" >AMD Ryzen 9</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={cpu_name}
                             name="cpu_name"
                             type="text"
-                            className="form-control" />
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Số nhân*</label>
                         <div className="col-sm-3">
@@ -356,7 +482,7 @@ class ActionProduct extends Component {
                             onChange={this.handleChange}
                             value={cpu_core}
                             name="cpu_core"
-                            type="number"
+                            type="text"
                             className="form-control" />
                         </div>
                         <label className="col-sm-3 form-control-label" >Số luồng*</label>
@@ -365,7 +491,7 @@ class ActionProduct extends Component {
                             onChange={this.handleChange}
                             value={cpu_thread}
                             name="cpu_thread"
-                            type="number"
+                            type="text"
                             className="form-control" />
                         </div>
                         <label className="col-sm-3 form-control-label" >Tốc độ CPU*</label>
@@ -374,17 +500,26 @@ class ActionProduct extends Component {
                             onChange={this.handleChange}
                             value={cpu_speed}
                             name="cpu_speed"
-                            type="number"
+                            type="text"
                             className="form-control" />
                         </div>
                         <label className="col-sm-3 form-control-label" >Bộ nhớ đệm*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="cpu_cache" value={cpu_cache} onChange={this.handleChange}>
+                            <option selected value="2 MB" >2 MB</option>
+                            <option value="3 MB" >3 MB</option>
+                            <option value="4 MB" >4 MB</option>
+                            <option value="5 MB" >5 MB</option>
+                            <option value="6 MB" >6 MB</option>
+                            <option value="7 MB" >7 MB</option>
+                            <option value="8 MB" >8 MB</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={cpu_cache}
                             name="cpu_cache"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                       </div>
 
@@ -394,21 +529,31 @@ class ActionProduct extends Component {
                       <div className="form-group row">
                         <label className="col-sm-3 form-control-label">Dung Lượng ổ cứng*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="harddrive_capacity" value={harddrive_capacity} onChange={this.handleChange}>
+                            <option selected value="128 GB" >128 GB</option>
+                            <option value="256 GB" >256 GB</option>
+                            <option value="512 GB" >512 GB</option>
+                            <option value="1 TB" >1 TB</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={harddrive_capacity}
                             name="harddrive_capacity"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Loại ổ cứng*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="harddrive_type" value={harddrive_type} onChange={this.handleChange}>
+                            <option selected value="SSD" >SSD</option>
+                            <option value="HDD" >HDD</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={harddrive_type}
                             name="harddrive_type"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                       </div>
 
@@ -418,30 +563,46 @@ class ActionProduct extends Component {
                       <div className="form-group row">
                         <label className="col-sm-3 form-control-label">Dung Lượng RAM*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="ram_capacity" value={ram_capacity} onChange={this.handleChange}>
+                            <option selected value="4 GB" >4 GB</option>
+                            <option value="8 GB" >8 GB</option>
+                            <option value="16 GB" >16 GB</option>
+                            <option value="32 GB" >32 GB</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={ram_capacity}
                             name="ram_capacity"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Loại RAM*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="ram_type" value={ram_type} onChange={this.handleChange}>
+                            <option selected value="DDR3" >DDR3</option>
+                            <option value="DDR4" >DDR4</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={ram_type}
                             name="ram_type"
                             type="text"
-                            className="form-control" />
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Tốc độ BUS RAM*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="ram_bus" value={ram_bus} onChange={this.handleChange}>
+                            <option selected value="1600" >1600</option>
+                            <option value="2400" >2400</option>
+                            <option value="2666" >2666</option>
+                            <option value="3200" >3200</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={ram_bus}
                             name="ram_bus"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                       </div>
 
@@ -451,30 +612,55 @@ class ActionProduct extends Component {
                       <div className="form-group row">
                         <label className="col-sm-3 form-control-label">Kích thước màn hình*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="screen_size" value={screen_size} onChange={this.handleChange}>
+                            <option selected value="11.6 inch" >11.6 inch</option>
+                            <option value="13 inch" >13 inch</option>
+                            <option value="13.3 inch" >13.3 inch</option>
+                            <option value="13.4 inch" >13.4 inch</option>
+                            <option value="13.5 inch" >13.5 inch</option>
+                            <option value="14 inch" >14 inch</option>
+                            <option value="14.5 inch" >14.5 inch</option>
+                            <option value="15.6 inch" >15.6 inch</option>
+                            <option value="16 inch" >16 inch</option>
+                            <option value="16.1 inch" >16.1 inch</option>
+                            <option value="17 inch" >17 inch</option>
+                            <option value="17.3 inch" >17.3 inch</option>
+                            <option value="18 inch" >18 inch</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={screen_size}
                             name="screen_size"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Độ phân giải*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="screen_resolution" value={screen_resolution} onChange={this.handleChange}>
+                            <option selected value="1280 x 720" >1280 x 720</option>
+                            <option value="1920 x 1080" >1920 x 1080</option>
+                            <option value="2560 x 1440" >2560 x 1440</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={screen_resolution}
                             name="screen_resolution"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Tần số quét*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="screen_frequency" value={screen_frequency} onChange={this.handleChange}>
+                            <option selected value="60 HZ" >60 HZ</option>
+                            <option value="90 HZ" >90 HZ</option>
+                            <option value="144 HZ" >144 HZ</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={screen_frequency}
                             name="screen_frequency"
-                            type="number"
-                            className="form-control" />
+                            type="text"
+                            className="form-control" /> */}
                         </div>
                       </div>
 
@@ -484,12 +670,21 @@ class ActionProduct extends Component {
                       <div className="form-group row">
                         <label className="col-sm-3 form-control-label">Tên card màn hình*</label>
                         <div className="col-sm-3">
-                          <input
+                          <select className="form-control mb-3" name="graphic_card" value={graphic_card} onChange={this.handleChange}>
+                            <option selected value="AMD Radeon R5 520" >AMD Radeon R5 520</option>
+                            <option value="GTX 1650" >GTX 1650</option>
+                            <option value="GTX 1650Ti" >GTX 1650Ti</option>
+                            <option value="GeForce MX130" >GeForce MX130</option>
+                            <option value="GeForce MX330" >GeForce MX330</option>
+                            <option value="RTX 1650" >RTX 1650</option>
+                            <option value="RTX 2050" >RTX 2050</option>
+                          </select>
+                          {/* <input
                             onChange={this.handleChange}
                             value={graphic_card}
                             name="graphic_card"
                             type="text"
-                            className="form-control" />
+                            className="form-control" /> */}
                         </div>
                         <label className="col-sm-3 form-control-label">Công nghệ âm thanh*</label>
                         <div className="col-sm-3">
@@ -512,7 +707,7 @@ class ActionProduct extends Component {
                             onChange={this.handleChange}
                             value={weight}
                             name="weight"
-                            type="number"
+                            type="text"
                             className="form-control" />
                         </div>
                         <label className="col-sm-3 form-control-label">Chất liệu vỏ*</label>

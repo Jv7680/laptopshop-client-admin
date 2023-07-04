@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './style.css'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { actFetchUsersRequest,actDeleteUserRequest } from '../../../redux/actions/user';
+import { actFetchUsersRequest, actDeleteUserRequest } from '../../../redux/actions/user';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Paginator from 'react-js-paginator';
@@ -42,17 +42,17 @@ class User extends Component {
     window.scrollTo(0, 0);
   }
 
-  handleRemove = (id,name) => {
-    console.log("id",id)
+  handleRemove = (id, name) => {
+    console.log("id", id)
     MySwal.fire({
       title: 'Xóa?',
-      text: `Bạn chắc chắn xóa tài khoản  ! ${name}`,
+      text: `Bạn chắc chắn xóa tài khoản tên ${name}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Có',
-      cancelButtonText:'Không'
+      cancelButtonText: 'Không'
     }).then(async (result) => {
       if (result.value) {
         await this.props.delete_user(id);
@@ -76,7 +76,7 @@ class User extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-   
+
   }
 
   // downloadExcel = () => {
@@ -87,7 +87,7 @@ class User extends Component {
   render() {
     let { users } = this.props;
     const { searchText, total } = this.state;
-    console.log("user nè",users)
+    console.log("user nè", users)
     return (
       <div className="content-inner">
         {/* Page Header*/}
@@ -144,15 +144,15 @@ class User extends Component {
                             return (
                               <tr key={index}>
                                 <th scope="row">{index + 1}</th>
-                                <td>{item.gmailCustomer}</td>
-                                <td>{item.lastName}</td>
-                                <td>{item.userCustomer}</td>
-                                <td>{item.phoneNumberCustomer}</td>
+                                <td>{item.gmail}</td>
+                                <td>{item.lastname}</td>
+                                <td>{item.username}</td>
+                                <td>{item.phonenumber}</td>
                                 <td>{item.address}</td>
                                 <td style={{ textAlign: "center" }}>
                                   <div>
-                                    <span title='Edit' className="fix-action"><Link to={`/customers/edit/${item.customerId}`}> <i className="fa fa-edit"></i></Link></span>
-                                    <span title='Delete' onClick={() => this.handleRemove(item.customerId,item.fullnameCustomer)} className="fix-action"><Link to="#"> <i className="fa fa-trash" style={{ color: '#ff00008f' }}></i></Link></span>
+                                    <span title='Edit' className="fix-action"><Link to={`/customers/edit/${item.accountId}`}> <i className="fa fa-edit"></i></Link></span>
+                                    <span title='Delete' onClick={() => this.handleRemove(item.accountId, `${item.lastname} ${item.firstname}`)} className="fix-action"><Link to="#"> <i className="fa fa-trash" style={{ color: '#ff00008f' }}></i></Link></span>
                                   </div>
                                 </td>
                               </tr>
@@ -177,7 +177,7 @@ class User extends Component {
           </div>
         </section>
         {/* Page Footer*/}
-      
+
       </div>
     )
   }

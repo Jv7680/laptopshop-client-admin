@@ -33,7 +33,8 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    width: "1000px"
+    width: "1000px",
+    height: "90vh",
   }
 };
 class OrderStatus3 extends Component {
@@ -283,6 +284,7 @@ class OrderStatus3 extends Component {
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
                             <th>Ghi chú</th>
+                            <th>Thanh toán</th>
                             <th>Ngày tạo HĐ</th>
                             <th>Xóa</th>
                             <th>Giao thành công
@@ -337,6 +339,7 @@ class OrderStatus3 extends Component {
                                 <td>{item.phoneNumber}</td>
                                 <td>{item.address}</td>
                                 <td>{item.customerNote}</td>
+                                <td>{item.paymentmethod}</td>
                                 <td>
                                   <Moment format="YYYY/MM/DD">
                                     {item.createDate}

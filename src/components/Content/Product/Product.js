@@ -270,7 +270,13 @@ class Product extends Component {
 
                               //   </td>
                               // </tr>
-                              <ProductItem key={item.productId} product={item}></ProductItem>
+                              <ProductItem
+                                key={item.productId}
+                                product={item}
+                                handleActive={this.handleActive}
+                                handleRemove={this.handleRemove}
+                              >
+                              </ProductItem>
                             )
                           }) : null}
                         </tbody>
