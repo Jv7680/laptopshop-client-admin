@@ -108,7 +108,7 @@ class App extends Component {
           {/* hiệu ứng load trang */}
           <Loading loadingCSS={cssPulseLoader}></Loading>
         </>
-        {auth ?
+        {localStorage.getItem('_auth') ?
           (
             <React.Fragment>
               <div className="page-content d-flex align-items-stretch">

@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { actToken } from '../../redux/actions/auth';
+import store from '../..';
 import callApi from '../../utils/apiCaller';
 let token;
 
@@ -32,8 +34,10 @@ class NavBar extends Component {
 
   HandleLogout = () => {
     localStorage.clear();
-
-    window.location.reload();
+    store.dispatch(actToken(null));
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
 
   }
 

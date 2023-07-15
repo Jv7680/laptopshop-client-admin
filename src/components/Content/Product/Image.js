@@ -1,8 +1,7 @@
 import React from "react";
-import { uploadProductImage, getProductListImageURL, deleteImage, deleteAllImageInImages } from '../../../firebase/CRUDImage';
 import Dropzone from 'react-dropzone';
 import Swal from "sweetalert2";
-import { async } from "@firebase/util";
+import { deleteAllImageInImages, deleteImage, getProductListImageURL, uploadProductImage } from '../../../firebase/CRUDImage';
 
 class Image extends React.Component {
     constructor(props) {

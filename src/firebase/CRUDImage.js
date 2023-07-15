@@ -128,8 +128,8 @@ export async function getProductListImage360URL(productID) {
 }
 
 // Hàm này trả về image URL đầu tiên
-export async function getProductFirstImageURL(productID) {
-  startLoading();
+export async function getProductFirstImageURL(productID, loading = true) {
+  loading && startLoading();
   // biến lưu danh sách URL và Ref
   let image = {
     imageURL: "",
@@ -162,7 +162,7 @@ export async function getProductFirstImageURL(productID) {
       });
   }
 
-  stopLoading();
+  loading && stopLoading();
   console.log(`image getProductFirstImageURL ${productID}:`, image);
   return image.imageURL;
 }

@@ -39,7 +39,7 @@ class ProductItem extends Component {
                 <td>{product.productName}</td>
                 <td style={{ textAlign: "center" }}>
                     <div className="fix-cart">
-                        <img src={product.image} className={`fix-img image-product-${product.productId}`} alt="not found" />
+                        <img src={process.env.PUBLIC_URL + '/img/logo/logoPTCustomer.png'} className={`fix-img image-product-${product.productId}`} alt="not found" />
                     </div>
                 </td>
                 <td>

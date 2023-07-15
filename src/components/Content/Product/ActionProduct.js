@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import validateProduct from '../../../utils/validations/validateProduct';
 import Image from './Image';
 import Image360 from './Image360';
+import store from '../../..';
 
 let token;
 let id;
@@ -235,6 +236,7 @@ class ActionProduct extends Component {
     }
 
     const addNewProduct = {
+      "productId": parseInt(localStorage.getItem('_newProductID')),
       "productName": newProductName,
       "quantity": newQuantity,
       "image": image,
@@ -299,11 +301,13 @@ class ActionProduct extends Component {
 
     if (!id) {
       console.log('addNewProduct: ', addNewProduct);
-      await this.props.add_Product(addNewProduct);
-      this.setState({
-        redirectToProduct: true
-      })
-
+      // let result = await this.props.add_Product(addNewProduct);
+      let result = await store.dispatch(actAddProductRequest(addNewProduct));
+      if (result) {
+        this.setState({
+          redirectToProduct: true
+        })
+      }
     }
     else {
       // let checkImage = this.handleCheckImage(null);
@@ -312,10 +316,14 @@ class ActionProduct extends Component {
       // }
 
       console.log('newProduct: ', newProduct);
-      await this.props.edit_Product(id, newProduct);
-      this.setState({
-        redirectToProduct: true
-      })
+      // await this.props.edit_Product(id, newProduct);
+      let result = await store.dispatch(actEditProductRequest(id, newProduct));
+      console.log('editProduct result: ', result);
+      if (result) {
+        this.setState({
+          redirectToProduct: true
+        })
+      }
 
     }
   }
@@ -812,11 +820,11 @@ class ActionProduct extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    add_Product: (newProduct) => {
-      dispatch(actAddProductRequest(newProduct))
+    add_Product: async (newProduct) => {
+      await dispatch(actAddProductRequest(newProduct))
     },
-    edit_Product: (id, data) => {
-      dispatch(actEditProductRequest(id, data))
+    edit_Product: async (id, data) => {
+      await dispatch(actEditProductRequest(id, data))
     }
   }
 }

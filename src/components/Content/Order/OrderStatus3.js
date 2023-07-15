@@ -6,7 +6,7 @@ import Moment from 'react-moment';
 import { actFetchOrdersRequest, actApproveOrdersRequest, actDeleteOrderRequest } from '../../../redux/actions/order';
 import { actFetchDashboardRequest } from '../../../redux/actions/dashboard'
 import { formatNumber } from '../../../config/TYPE'
-
+import { getProductFirstImageURL } from '../../../firebase/CRUDImage';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Paginator from 'react-js-paginator';
@@ -178,7 +178,15 @@ class OrderStatus3 extends Component {
           <tr>
             <td className="li-product-thumbnail d-flex justify-content-center">
               <Link to={`/products/edit/${item.productId}`} >
-                <div className="fix-cart"> <img className="fix-img" src={item.imgLink} alt="Li's Product" /></div>
+                <div className="fix-cart">
+                  <img
+                    id={`image-modal-product-${item.productId}`}
+                    className="fix-img"
+                    src={process.env.PUBLIC_URL + '/img/logo/logoPTCustomer1.png'}
+                    onLoad={(event) => { event.target.src.includes('/img/logo/logoPTCustomer1.png') && this.setImage(item.productId, false) }}
+                    alt="notFound"
+                  />
+                </div>
               </Link>
             </td>
             <td className="li-product-name">
@@ -199,6 +207,18 @@ class OrderStatus3 extends Component {
 
   closeModal = () => {
     this.setState({ modalIsOpen: false });
+  }
+
+  setImage = async (productId) => {
+    let imageURL = await getProductFirstImageURL(productId, false);
+
+    if (imageURL === '') {
+      imageURL = process.env.PUBLIC_URL + '/images/logo/logoPTCustomer1.png';
+      document.getElementById(`image-modal-product-${productId}`).setAttribute('src', imageURL);
+    }
+    else {
+      document.getElementById(`image-modal-product-${productId}`).setAttribute('src', imageURL);
+    }
   }
 
   render() {
@@ -241,7 +261,7 @@ class OrderStatus3 extends Component {
                       ariaHideApp={false}
                       contentLabel="Example Modal"
                     >
-                      <div className="table-content table-responsive">
+                      <div className="table-content table-responsive" style={{ minHeight: "90%" }}>
                         <table className="table">
                           <thead>
                             <tr>
@@ -260,12 +280,18 @@ class OrderStatus3 extends Component {
                         </table>
                       </div>
                       <div className="feedback-input">
-                        <div className="feedback-btn pb-15">
+                        <div className="feedback-btn pb-15" style={{ height: 50 }}>
 
                           <button
                             onClick={this.closeModal}
                             className="btn mr-1"
-                            style={{ background: "#fed700", color: "white" }}
+                            style={{
+                              background: "#fed700",
+                              color: "white",
+                              position: "absolute",
+                              bottom: -10,
+                              right: 0
+                            }}
                           >
                             Thoát
                           </button>

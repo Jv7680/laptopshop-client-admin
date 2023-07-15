@@ -6,6 +6,8 @@ import { actFetchUsersRequest, actDeleteUserRequest } from '../../../redux/actio
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Paginator from 'react-js-paginator';
+import Switch from "react-switch";
+import callApi from '../../../utils/apiCaller';
 
 const MySwal = withReactContent(Swal)
 
@@ -42,11 +44,11 @@ class User extends Component {
     window.scrollTo(0, 0);
   }
 
-  handleRemove = (id, name) => {
+  handleLock = (id, name) => {
     console.log("id", id)
     MySwal.fire({
       title: 'Xóa?',
-      text: `Bạn chắc chắn xóa tài khoản tên ${name}`,
+      text: `Bạn chắc chắn khóa tài khoản tên ${name}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -55,14 +57,27 @@ class User extends Component {
       cancelButtonText: 'Không'
     }).then(async (result) => {
       if (result.value) {
-        await this.props.delete_user(id);
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
+        let body = {
+          accountId: id,
+          isDeleted: 1
+        };
+        let token = localStorage.getItem('_auth');
+        await callApi(`admin/account/updateStatus`, "PUT", body, token);
+        this.fetch_reload_data();
       }
     })
+  }
+
+  handleUnlock = async (id) => {
+    console.log("id", id)
+    let body = {
+      accountId: id,
+      isDeleted: 0
+    };
+    let token = localStorage.getItem('_auth');
+    let res = await callApi(`admin/account/updateStatus`, "PUT", body, token);
+    console.log("handleLock", res)
+    this.fetch_reload_data();
   }
 
   handleChange = (event) => {
@@ -136,7 +151,7 @@ class User extends Component {
                             <th style={{ textAlign: "center" }}>Tên đăng nhập</th>
                             <th style={{ textAlign: "center" }}>SĐT</th>
                             <th style={{ textAlign: "center" }}>Địa chỉ</th>
-                            <th style={{ textAlign: "center" }}>Chức năng</th>
+                            <th style={{ textAlign: "center" }}>Khóa tài khoản</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -145,15 +160,22 @@ class User extends Component {
                               <tr key={index}>
                                 <th scope="row">{index + 1}</th>
                                 <td>{item.gmail}</td>
-                                <td>{item.lastname}</td>
+                                <td>{item.lastname + " " + item.firstname}</td>
                                 <td>{item.username}</td>
                                 <td>{item.phonenumber}</td>
                                 <td>{item.address}</td>
                                 <td style={{ textAlign: "center" }}>
-                                  <div>
+                                  {/* <div>
                                     <span title='Edit' className="fix-action"><Link to={`/customers/edit/${item.accountId}`}> <i className="fa fa-edit"></i></Link></span>
                                     <span title='Delete' onClick={() => this.handleRemove(item.accountId, `${item.lastname} ${item.firstname}`)} className="fix-action"><Link to="#"> <i className="fa fa-trash" style={{ color: '#ff00008f' }}></i></Link></span>
-                                  </div>
+                                  </div> */}
+                                  {
+                                    item.isDeleted === 1 ?
+                                      <Switch onChange={() => this.handleUnlock(item.accountId, `${item.lastname} ${item.firstname}`)} checked={true} />
+                                      :
+                                      <Switch onChange={() => this.handleLock(item.accountId)} checked={false} />
+
+                                  }
                                 </td>
                               </tr>
                             )

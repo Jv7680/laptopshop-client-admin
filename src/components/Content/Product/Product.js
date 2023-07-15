@@ -1,20 +1,13 @@
-import React, { Component } from 'react'
-import './style.css'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { actFetchProductsRequest, actFetchProductsRequest1, actDeleteProductRequest, actGetProductOfKeyRequest, actGetProductOfCatagoryRequest, actActiveProductRequest } from '../../../redux/actions/product';
-import { actFetchCategoriesRequest } from '../../../redux/actions/category';
-import Switch from "react-switch";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import MyFooter from '../../MyFooter/MyFooter'
+import React, { Component } from 'react';
 import Paginator from 'react-js-paginator';
-import { is_empty } from '../../../utils/validations';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { actFetchCategoriesRequest } from '../../../redux/actions/category';
+import { actActiveProductRequest, actDeleteProductRequest, actFetchProductsRequest, actGetProductOfCatagoryRequest, actGetProductOfKeyRequest } from '../../../redux/actions/product';
 import callApi from '../../../utils/apiCaller';
-import { getProductFirstImageURL } from '../../../firebase/CRUDImage';
+import MyFooter from '../../MyFooter/MyFooter';
 import ProductItem from './ProductItem';
-import { async } from '@firebase/util';
-const MySwal = withReactContent(Swal)
+import './style.css';
 
 class Product extends Component {
 
@@ -41,11 +34,13 @@ class Product extends Component {
 
       // Tạo biến lưu id product tiếp theo trong local storage
       // Dùng trong trường hợp thêm mới product để up ảnh firebase
-      const resNew = await callApi(`admin/product/all?page=${res.data.totalPage}&size=10`, 'GET', null, token);
+      const resNew = await callApi(`admin/product/all?page=1&size=10`, 'GET', null, token);
       if (resNew && resNew.status === 200) {
-        let dataFinalPage = resNew.data.listProducts;
+        console.log("resNew là", resNew);
+        // let dataFinalPage = resNew.data.listProducts;
         // newProductID sẽ bằng id mới nhất + 1 
-        let newProductID = dataFinalPage[dataFinalPage.length - 1].productId + 1;
+        // let newProductID = dataFinalPage[dataFinalPage.length - 1].productId + 1;
+        let newProductID = resNew.data.listProducts[0].productId + 1;
         localStorage.setItem('_newProductID', newProductID);
       }
     }
