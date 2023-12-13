@@ -74,7 +74,7 @@ class Image360 extends React.Component {
             // Thay thế lần luotj theo thứ tự src hiện tại của component bằng link ảnh
             if (listImage360URL.length > 0) {
                 for (let i = 0; i < listImage360URL.length; i++) {
-                    document.getElementsByClassName('sc-beySbM hmghSZ')[i].setAttribute('src', listImage360URL[i])
+                    document.querySelectorAll('div.image-360-area img.sc-beySbM')[i].setAttribute('src', listImage360URL[i])
                 }
             }
         }, 800);
